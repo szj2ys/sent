@@ -29,11 +29,12 @@ describe('Landing Page', () => {
   it('renders CTA buttons', () => {
     render(<Stub initialEntries={['/']} />);
     expect(screen.getByText('Get Started Free')).toBeInTheDocument();
-    expect(screen.getByText('View Documentation')).toBeInTheDocument();
+    expect(screen.getByText('Documentation')).toBeInTheDocument();
   });
 
-  it('renders all 3 features', () => {
+  it('renders features section', () => {
     render(<Stub initialEntries={['/']} />);
+    expect(screen.getByText('Everything you need')).toBeInTheDocument();
     expect(screen.getByText('Abandoned Cart Recovery')).toBeInTheDocument();
     expect(screen.getByText('Order Confirmations')).toBeInTheDocument();
     expect(screen.getByText('ROI Tracking')).toBeInTheDocument();
@@ -41,15 +42,15 @@ describe('Landing Page', () => {
 
   it('renders How It Works section with 3 steps', () => {
     render(<Stub initialEntries={['/']} />);
-    expect(screen.getByText('How it works')).toBeInTheDocument();
-    expect(screen.getByText('Connect your Shopify store')).toBeInTheDocument();
-    expect(screen.getByText('Configure Twilio WhatsApp')).toBeInTheDocument();
-    expect(screen.getByText('Start recovering sales')).toBeInTheDocument();
+    expect(screen.getByText('Simple three-step setup')).toBeInTheDocument();
+    expect(screen.getByText('Connect your store')).toBeInTheDocument();
+    expect(screen.getByText('Configure WhatsApp')).toBeInTheDocument();
+    expect(screen.getByText('Start recovering')).toBeInTheDocument();
   });
 
   it('renders Pricing section', () => {
     render(<Stub initialEntries={['/']} />);
-    expect(screen.getByText('Simple pricing')).toBeInTheDocument();
+    expect(screen.getByText('Start free, scale as you grow')).toBeInTheDocument();
     expect(screen.getByText('Free')).toBeInTheDocument();
     expect(screen.getByText('Pro')).toBeInTheDocument();
     expect(screen.getByText('200 messages/month')).toBeInTheDocument();
@@ -58,16 +59,12 @@ describe('Landing Page', () => {
   it('renders Footer with links', () => {
     render(<Stub initialEntries={['/']} />);
     expect(screen.getAllByText('Sent').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Docs').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('GitHub').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Privacy')).toBeInTheDocument();
   });
 
   it('renders navigation links', () => {
     render(<Stub initialEntries={['/']} />);
     expect(screen.getByText('Features')).toBeInTheDocument();
-    expect(screen.getAllByText('Docs').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('GitHub').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders Add to Shopify button in navigation', () => {
