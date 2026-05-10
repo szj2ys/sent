@@ -6,9 +6,11 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "test": "vitest"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "@react-router/node": "7.15.0",
     "@react-router/serve": "7.15.0",
     "isbot": "^5.1.36",
@@ -19,11 +21,19 @@
   "devDependencies": {
     "@react-router/dev": "7.15.0",
     "@tailwindcss/vite": "^4.2.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^22",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^27.0.1",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vite": "^8.0.3"
+    "vite": "^8.0.3",
+    "vitest": "^3.2.4"
   }
 }

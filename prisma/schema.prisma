@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  id                      String   @id
+  domain                  String   @unique
+  twilioAccountSid        String?
+  twilioAuthToken         String?
+  isActive                Boolean  @default(false)
+  enableAbandonedCart     Boolean  @default(true)
+  enableOrderConfirmation Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  
+  customerConsents        CustomerConsent[]
+  messageLogs             MessageLog[]
+  abandonedCheckouts      AbandonedCheckout[]
+  orderAttributions       OrderAttribution[]
+}
+
+model CustomerConsent {
+  id          String    @id @default(cuid())
+  shopId      String
+  phoneNumber String
+  consentedAt DateTime  @default(now())
+  revokedAt   DateTime?
+  
+  shop        Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  
+  @@unique([shopId, phoneNumber])
+  @@index([shopId])
+}
+
+model AbandonedCheckout {
+  id              String   @id @default(cuid())
+  shopId          String
+  checkoutToken   String
+  customerPhone   String
+  totalPrice      String
+  lineItems       String   // JSON stringified
+  scheduledTaskId String?
+  recoveredAt     DateTime?
+  orderId         String?
+  createdAt       DateTime @default(now())
+  
+  shop            Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  messageLogs     MessageLog[]
+  orderAttributions OrderAttribution[]
+  
+  @@unique([shopId, checkoutToken])
+  @@index([shopId])
+}
+
+model MessageLog {
+  id              String        @id @default(cuid())
+  shopId          String
+  type            MessageType
+  phoneNumber     String
+  templateId      String
+  status          MessageStatus
+  twilioSid       String?
+  sentAt          DateTime?
+  deliveredAt     DateTime?
+  clickedAt       DateTime?
+  failedReason    String?
+  trackingUrl     String?
+  clickCount      Int           @default(0)
+  createdAt       DateTime      @default(now())
+  abandonedCheckoutId String?
+  
+  shop            Shop          @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  abandonedCheckout AbandonedCheckout? @relation(fields: [abandonedCheckoutId], references: [id])
+  orderAttributions OrderAttribution[]
+  
+  @@index([shopId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderAttribution {
+  id                  String   @id @default(cuid())
+  shopId              String
+  orderId             String   @unique
+  messageLogId        String
+  abandonedCheckoutId String
+  recoveredAmount     String
+  customerPhone       String
+  attributedAt        DateTime @default(now())
+  
+  shop                Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  messageLog          MessageLog @relation(fields: [messageLogId], references: [id], onDelete: Cascade)
+  abandonedCheckout   AbandonedCheckout @relation(fields: [abandonedCheckoutId], references: [id], onDelete: Cascade)
+  
+  @@index([shopId])
+  @@index([abandonedCheckoutId])
+}
+
+enum MessageType {
+  ORDER_CONFIRMATION
+  ABANDONED_CART
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+}
